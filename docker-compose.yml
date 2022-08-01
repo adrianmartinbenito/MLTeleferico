@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+  machine-learning:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - TENSORFLOW_VERSION=2.9.1-gpu
+        # - TENSORFLOW_VERSION=2.9.1
+    volumes:
+      - ./resources:/home/app/machine-learning/resources
+      - ./results:/home/app/machine-learning/results
+      - ./app:/home/app/machine-learning/app
+
+    #Activar las siguientes líneas para usar GPU
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
