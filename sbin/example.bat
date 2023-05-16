@@ -1,0 +1,1 @@
+python app/app.py --data_path "data.csv" --model "svm" --hyper_params1 "{\'alpha\': 0.1}" --model2 "random_forest" --hyper_params2 "{\'n_estimators\': 100}" --model3 "neural_network" --hyper-params3 "{\'hidden_layer_sizes\': (50, 50)}" --test-size 0.2 --shuffle True --random-seed 42 --save-models True --output-path "models/" --evaluation-metric "mean_squared_error"

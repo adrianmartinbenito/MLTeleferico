@@ -1,0 +1,34 @@
+#########################################
+##
+## Fichero de configuración
+##
+#########################################
+
+[log]
+# Ruta del fichero de log (puede ser ruta absoluta o relativa). Por defecto "./logs/api.log"
+fichero_log = "./logs/api.log"
+
+# Nivel de detalle del log (DEBUG, INFO, WARNING, ERROR, FATAL, CRITICAL). Por defecto "INFO"
+nivel_log = "DEBUG"
+
+# Se genera un fichero de log diario. Aquí se establece el número de ficheros máximo a mantener (se borran los más antiguos)
+# Por defecto 30 días.
+num_max_ficheros_log = 30
+
+[dirs]
+tmp = "./resources/tmp"
+
+[locale]
+# Zona horaria a utilizar en las salidas que tengan hora en un reporte
+# Internamente se debería trabajar siempre con hora UTC
+timezone = "Europe/Madrid"
+locale = "es_ES.utf8"
+datetime_format = "%d-%m-%Y %H:%M"
+date_short_format = "%d-%m-%Y"
+datetime_edited_format = "%d de %B de %Y, %H:%Mh."
+
+[html2pdf_tool]
+exe_path = "resources/wkhtmltox/bin/wkhtmltopdf.exe"
+
+[reports]
+base_dir = "./app/config/reports"
