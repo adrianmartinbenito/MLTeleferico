@@ -10,7 +10,7 @@ from sklearn.metrics import make_scorer, mean_squared_error
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.svm import SVR
 from scipy import linalg
-from sklearn.metrics import explained_variance_score
+
 
 
 ###################### Leer datos ###########################
@@ -49,7 +49,7 @@ input = input.transpose()
 output = np.array(amount_users)
 
 # Definir valores de training y testing 
-x_train, x_test, y_train, y_test, date_train, date_test = train_test_split(input, output, date, test_size=0.2, random_state= 0) #shuffle=False
+x_train, x_test, y_train, y_test, date_train, date_test = train_test_split(input, output, date, test_size=0.2, random_state= 71) #shuffle=False
 date_train = date_train.astype(str)
 date_test = date_test.astype(str)
 
@@ -65,19 +65,27 @@ y_test = min_max_scaler_y.transform(y_test)
 ########################## SVM ##############################
 
 if SVM:
-    #K = 50 #Cross variations
-    #scorer = make_scorer(mean_squared_error, greater_is_better=False)
-    #parameters = [{'kernel': ['rbf'], 'gamma': [1e-4, 1e-3, 0.01, 0.1, 0.2, 0.5, 0.6, 0.9],'C': [1, 10, 100, 1000, 10000]}]
-    #model = GridSearchCV(SVR( epsilon=0.01), parameters , cv= K, scoring=scorer)
-    model = SVR(kernel='rbf',gamma=1, C=10, epsilon = 0.01)
+    
+    K = 5 #Cross variations
+    scorer = make_scorer(mean_squared_error, greater_is_better=False)
+    parameters = [{'kernel' : ('linear', 'poly', 'rbf', 'sigmoid'),'C' : [1,5,3],'degree' : [3,8],'coef0' : [0.01,0.1,0.5],'gamma' : ('auto','scale')}]
+    model = GridSearchCV(SVR( epsilon=0.1), parameters , cv= K, scoring='mean_squared_error' ,n_jobs = -1, verbose = 1)
+    
+    #model = SVR(epsilon=0.01,kernel='rbf',gamma= 'scale', C=5, coef0=0.01, degree=3 ,verbose=1)
     model.fit(x_train, y_train.ravel())
-
+    print(model.score(x_test,y_test.ravel()))
+    
     # Comprobar el score de cada parámetro
-    #print("Grid scores on training set:")
-    #means = model.cv_results_['mean_test_score']
-    #stds = model.cv_results_['std_test_score'] 
-    #for mean, std, params in zip(means, stds, model.cv_results_['params']):
-    #    print("%0.3f (+/-%0.03f) for %r"% (mean, std * 2, params))
+    print(model.best_params_)
+    
+    print(model.best_score_)
+    
+    means = model.cv_results_['mean_test_score']
+    stds = model.cv_results_['std_test_score'] 
+    for mean, std, params in zip(means, stds, model.cv_results_['params']): 
+        print("%0.3f (+/-%0.03f) for %r"% (mean, std * 2, params))
+    
+    
  
 ########################## ELM ##############################
 
