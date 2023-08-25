@@ -23,15 +23,7 @@ ELM =False
 
 ####################### Funciones ###########################
 
-def showGraph(date,y,y_predict,date_show,save_location):
-    
-    plt.figure(figsize=(30,18))
-    plt.plot(date,y[:],"g")
-    plt.plot(date,y_predict[0],"r")
-    plt.xticks(date_show) #rotation ='vertical'
-    plt.legend(['Actual','Predicted'])
-    plt.savefig(save_location,dpi=500)
-    plt.show()
+
     
 ###################### Tratar datos #########################
 

@@ -1,6 +1,5 @@
 import logging
 from pathlib import Path
-
 from config.config import env_config
 
 #Crear el directorio de logs si no existe
@@ -13,18 +12,13 @@ path.parent.mkdir(parents=True, exist_ok=True)
           
           No saca en el log las peticiones http
           No saca el payload indicado en la traza
-
-
        - Intento aplicar https://github.com/tiangolo/fastapi/issues/1276#issuecomment-663781706 pero no tiene efecto
-
        - Revisar https://medium.com/1mgofficial/how-to-override-uvicorn-logger-in-fastapi-using-loguru-124133cdcd4e
-
 
 """
 
 import sys
 from pprint import pformat
-
 from loguru import logger
 from loguru._defaults import LOGURU_FORMAT
 

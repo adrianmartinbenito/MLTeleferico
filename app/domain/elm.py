@@ -70,16 +70,16 @@ biases = abs(np.random.normal(size=[hidden_size]))
 def relu(x):
     return np.maximum(x, 0, x)
 
-def hidden_nodes(X):
-    G = np.dot(X, input_weights)
+def hidden_nodes(x):
+    G = np.dot(x, input_weights)
     G = G + biases
     H = relu(G)
     return H
 
 output_weights = np.dot(linalg.pinv(hidden_nodes(x_train)), y_train)
 
-def predict(X):
-    out = hidden_nodes(X)
+def predict(x):
+    out = hidden_nodes(x)
     out = np.dot(out, output_weights)
     return out
 
