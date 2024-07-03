@@ -87,7 +87,7 @@ def select_model(model_name, input_shape):
     elif model_name.upper() == "MLP":
         # Solicitar hiperparámetros específicos para MLP
         num_layers = int(input("Introduce el número de capas para MLP: "))
-        neurons_per_layer = [int(input(f"Introduce el número de neuronas para la capa {i+1}: ")) for i in range(num_layers)]
+        neurons_per_layer = [int(input(f"Introduce el número de neuronas para la capa (Recuerda que la última tiene que ser 1) {i+1}: ")) for i in range(num_layers)]
         learning_rate = float(input("Introduce la tasa de aprendizaje para MLP: "))
         activation_functions = [input(f"Introduce la función de activación para la capa {i+1} (sigmoid/tanh/relu): ") for i in range(num_layers)]
         optimizer = input("Introduce el optimizador para MLP (adam/sgd/rmsprop): ")
