@@ -57,7 +57,21 @@ class DataTreat:
         return inputs, outputs.values
 
     def split_data(self, inputs, outputs, test_size=0.2):
-        self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(inputs, outputs, test_size=test_size, random_state=None)
+        # Determinar el número de muestras totales
+        total_samples = len(inputs)
+        
+        # Calcular el número de muestras para el conjunto de prueba
+        test_samples = int(total_samples * test_size)
+        
+        # Crear índices fijos para entrenamiento y prueba
+        train_indices = range(test_samples, total_samples)
+        test_indices = range(test_samples)
+        
+        # Dividir los datos utilizando los índices fijos
+        self.x_train = inputs[train_indices]
+        self.x_test = inputs[test_indices]
+        self.y_train = outputs[train_indices]
+        self.y_test = outputs[test_indices]
 
     def normalize_data(self):
         self.x_train = self.min_max_scaler_x.fit_transform(self.x_train)
@@ -67,6 +81,12 @@ class DataTreat:
         self.y_train = self.min_max_scaler_y.fit_transform(self.y_train)
         self.y_test = self.y_test.reshape(-1, 1)
         self.y_test = self.min_max_scaler_y.transform(self.y_test)
+        
+    def desnormalize_data(self, data, type):
+        if type == "x":
+            return self.min_max_scaler_x.inverse_transform(data)
+        else:
+            return self.min_max_scaler_y.inverse_transform(data)
         
 
     def process_data(self):

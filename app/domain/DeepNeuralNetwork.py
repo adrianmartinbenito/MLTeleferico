@@ -8,7 +8,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import time
 
 class DeepNeuralNetwork:
-    def __init__(self, input_dim, hidden_layers=[64, 64], activation='relu', output_activation='linear'):
+    def __init__(self, input_dim, hidden_layers=[16,16], activation='relu', output_activation='linear'):
         """
         Constructor de la clase.
         
@@ -33,7 +33,7 @@ class DeepNeuralNetwork:
         # Compilar el modelo
         self.model.compile(optimizer='adam', loss='mse', metrics=['mae'])
 
-    def fit(self, x, y, epochs=100, batch_size=32, validation_split=0.2, verbose=1):
+    def fit(self, x, y, epochs=30, batch_size=128, validation_split=0.2, verbose=1):
         """Entrenar el modelo."""
         history = self.model.fit(x, y, epochs=epochs, batch_size=batch_size, validation_split=validation_split, verbose=verbose)
         return history

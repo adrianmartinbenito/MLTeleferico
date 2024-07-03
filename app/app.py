@@ -22,10 +22,11 @@ def select_dataset(input_directory):
     # Comprobación de que hay ficheros en el directorio
     if not files:
         print("No hay datasets en el directorio especificado.")
+        logger.error("No hay datasets en el directorio especificado.")
         return None
 
     # Se muestra la lista de datasets disponibles
-    print("Please choose a dataset:")
+    print("Elige un dataset:")
     for idx, file in enumerate(files, 1):
         print(f"{idx}. {file}")
 
@@ -36,34 +37,41 @@ def select_dataset(input_directory):
             selection = int(input("Introduce el número del dataset: "))
             if selection < 1 or selection > len(files):
                 print(f"El número debe encontrarse entre 1 y {len(files)}.")
+                logger.error(f"El número debe encontrarse entre 1 y {len(files)}.")
         except ValueError:
             print("Por favor, introduce un número.")
+            logger.error("Se introdujo un valor no numérico.")
     
     # Se devuelve el path del fichero seleccionado
     path = os.path.join(input_directory, files[selection-1])
+    print(f"Dataset seleccionado: {path}")
+    logger.info(f"Dataset seleccionado: {path}")
     return path 
 
 def select_model(model_name, input_dim):
     if model_name.upper() == "SVM":
+        print("El modelo elegido para la predicción es SVM")
         logger.info("El modelo elegido para la predicción es SVM")
         return SupportVectorRegression(kernel='rbf')
     elif model_name.upper() == "ELM":
+        print("El modelo elegido para la predicción es ELM")
         logger.info("El modelo elegido para la predicción es ELM")
         return ExtremeLearningMachine() 
-    elif model_name.upper() == "DNN":
-        logger.info("El modelo elegido para la predicción es DNN")
+    elif model_name.upper() == "MLP":
+        print("El modelo elegido para la predicción es MLP")
+        logger.info("El modelo elegido para la predicción es MLP")
         return DeepNeuralNetwork(input_dim) 
 
 def train_model(model, x_train, x_test, y_train, y_test ):
-    
     model.fit(x_train, y_train)
     score = model.score(x_test, y_test)
+    logger.info(f"El score del modelo es: {score}")
     return model, score
 
 if __name__ == "__main__":
-    
+    logger.info("Inicio de la aplicación")
     # Modelo
-    print("Elegir un algoritmo: SVM, ELM, DNN")
+    print("Elige un algoritmo: ELM, MLP")
     model_name = input()
     
     # Dataset
@@ -80,6 +88,10 @@ if __name__ == "__main__":
     print("MAE: ", trained_model.calculate_mae(data_handler.x_test, data_handler.y_test))
     print("R2: ", trained_model.calculate_r2(data_handler.x_test, data_handler.y_test))
     print("Time: ", trained_model.prediction_time(data_handler.x_test))
+    logger.info(f"El RMSE del modelo es: {trained_model.calculate_rmse(data_handler.x_test, data_handler.y_test)}")
+    logger.info(f"El MAE del modelo es: {trained_model.calculate_mae(data_handler.x_test, data_handler.y_test)}")
+    logger.info(f"El R2 del modelo es: {trained_model.calculate_r2(data_handler.x_test, data_handler.y_test)}")
+    logger.info(f"El tiempo de predicción del modelo es: {trained_model.prediction_time(data_handler.x_test)}")
     
     # Predicción
     
@@ -100,8 +112,12 @@ if __name__ == "__main__":
     #svm_predictions_test = min_max_scaler_y.inverse_transform([svm_predictions_test])
 
     # Mostrar gráfico training
+    svm_predictions = data_handler.desnormalize_data(svm_predictions, "y")
+    data_handler.y_train = data_handler.desnormalize_data(data_handler.y_train, "y")
     model.show_graph(data_handler.y_train,svm_predictions,'results/svm_train.jpg')
     # Mostrar gráfico testing
+    svm_predictions_test = data_handler.desnormalize_data(svm_predictions_test, "y")
+    data_handler.y_test = data_handler.desnormalize_data(data_handler.y_test, "y")
     model.show_graph(data_handler.y_test,svm_predictions_test,'results/svm_test.jpg')
     # Mostrar resultado
     #model.show_graph()

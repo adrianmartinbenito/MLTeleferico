@@ -6,7 +6,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import time
 
 class ExtremeLearningMachine:
-    def __init__(self, hidden_units=100, activation_function=np.tanh):
+    def __init__(self, hidden_units=70, activation_function=np.tanh):
         self.hidden_units = hidden_units
         self.activation_function = activation_function
         self.input_weights = None
