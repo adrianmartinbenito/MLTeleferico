@@ -11,6 +11,7 @@ services:
       - ./resources:/home/app/machine-learning/resources
       - ./results:/home/app/machine-learning/results
       - ./app:/home/app/machine-learning/app
+      - ./logs:/home/app/machine-learning/logs
 
     #Activar las siguientes líneas para usar GPU
     deploy:
@@ -18,3 +19,4 @@ services:
         reservations:
           devices:
             - capabilities: [gpu]
+    command: ["tail", "-f", "/dev/null"]

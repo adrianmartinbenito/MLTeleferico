@@ -26,6 +26,7 @@ WORKDIR $APP_HOME
 
 # Install Requirements
 COPY requirements.txt .
+COPY .env .env
 RUN pip install -r requirements.txt
 
 
@@ -33,3 +34,4 @@ COPY ./app ${APP_HOME}/app
 RUN chown -R app:app $HOME
 
 USER app
+#CMD ["python", "./app/app.py"]

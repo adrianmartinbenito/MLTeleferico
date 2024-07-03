@@ -1,8 +1,6 @@
-wheel
 scikit-learn 
 scipy 
 matplotlib
-sklearn
 pandas
 dynaconf
 loguru
