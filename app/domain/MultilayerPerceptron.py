@@ -24,11 +24,13 @@ class MultilayerPerceptron:
         return self.model.summary()
 
     def show_graph(self, y, y_predict, save_location):
-        plt.figure(figsize=(30,18))
-        plt.plot(y[:],"g")
-        plt.plot(y_predict[:],"r")
-        plt.legend(['Actual','Predicted'])
-        plt.savefig(save_location,dpi=500)
+        plt.figure(figsize=(30,18)) 
+        plt.plot(y[:], "g", linewidth=2)  
+        plt.plot(y_predict[:], "r", linewidth=2) 
+        plt.legend(['Actual','Predicted'], fontsize=22) # 
+        plt.xticks(fontsize=18)
+        plt.yticks(fontsize=18)  
+        plt.savefig(save_location, dpi=600)
         plt.show()
 
     def calculate_rmse(self, x, y_true):
@@ -54,4 +56,5 @@ class MultilayerPerceptron:
         return r2_score(y_true, y_pred)
 
     def predict(self, x):
-        return self.model.predict(x)
+        predictions = self.model.predict(x)
+        return np.maximum(0, predictions)

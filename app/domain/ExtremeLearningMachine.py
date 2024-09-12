@@ -8,7 +8,7 @@ from numpy.random import default_rng
 
 
 class ExtremeLearningMachine:
-    def __init__(self, num_neurons, activation_function, seed=None):
+    def __init__(self, num_neurons, activation_function, seed):
         self.num_neurons = num_neurons
         switcher = {
             'sigmoid': lambda x: 1 / (1 + np.exp(-x)),
@@ -43,7 +43,8 @@ class ExtremeLearningMachine:
         """Predicción del modelo ELM."""
         x = self.scaler.transform(x)
         hidden_layer_output = self.activation_function(x @ self.input_weights + self.bias_weights)
-        return hidden_layer_output @ self.output_weights
+        predictions = hidden_layer_output @ self.output_weights
+        return np.maximum(0, predictions)
 
     def score(self, x, y):
         """Devuelve el coeficiente de determinación R^2 de la predicción."""
@@ -53,11 +54,13 @@ class ExtremeLearningMachine:
         return 1 - (u/v)
     
     def show_graph(self, y, y_predict, save_location):
-        plt.figure(figsize=(30,18))
-        plt.plot(y[:],"g")
-        plt.plot(y_predict[:],"r")
-        plt.legend(['Actual','Predicted'])
-        plt.savefig(save_location,dpi=500)
+        plt.figure(figsize=(30,18)) 
+        plt.plot(y[:], "g", linewidth=2)  
+        plt.plot(y_predict[:], "r", linewidth=2) 
+        plt.legend(['Actual','Predicted'], fontsize=22) # 
+        plt.xticks(fontsize=18)
+        plt.yticks(fontsize=18)  
+        plt.savefig(save_location, dpi=600)
         plt.show()
     
     def calculate_rmse(self, x, y_true):
@@ -78,7 +81,7 @@ class ExtremeLearningMachine:
         end_time = time.time()
         return end_time - start_time
 
-def optimize_hyperparameters(x, y, neuron_range, activation_functions, test_size=0.2, random_state=None):
+def optimize_hyperparameters(x, y, neuron_range, activation_functions, random_state, test_size=0.2):
     """
     Optimiza los hiperparámetros para el modelo ELM.
     
@@ -100,7 +103,7 @@ def optimize_hyperparameters(x, y, neuron_range, activation_functions, test_size
     
     for neurons in neuron_range:
         for activation_function in activation_functions:
-            model = ExtremeLearningMachine(neurons, activation_function)
+            model = ExtremeLearningMachine(neurons, activation_function, seed=random_state)
             model.fit(x_train, y_train)
             y_pred = model.predict(x_test)
             score = r2_score(y_test, y_pred)

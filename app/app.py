@@ -55,6 +55,10 @@ def select_model(model_name, input_shape):
         # Solicitar hiperparámetros específicos para ELM
         print("El modelo elegido para la predicción es ELM")
         logger.info("El modelo elegido para la predicción es ELM")
+        seed = int(input("Elige una semilla para la aleatoriedad: "))
+        print("La semilla elegida es: " + str(seed))
+        logger.info("La semilla elegida es: " + str(seed))
+
         grid_search = input("¿Desea realizar una búsqueda de hiperparámetros para ELM? (s/n): ")
         if grid_search.lower() == "s":
             neuron_range = range(10, 101, 10)  # De 10 a 100 neuronas, en pasos de 10
@@ -63,7 +67,7 @@ def select_model(model_name, input_shape):
             print("Se va a probar con el rango de neuronas de 10 a 100, en pasos de 10. Y con las funciones de activación: sigmoid, tanh, relu y linear.")
             logger.info("Realizando búsqueda de hiperparámetros para ELM...")
             logger.info("Se va a probar con el rango de neuronas de 10 a 100, en pasos de 10. Y con las funciones de activación: sigmoid, tanh, relu y linear.")
-            hyperparameters, score = optimize_hyperparameters(data_handler.x_train, data_handler.y_train.ravel(), neuron_range, activation_functions)
+            hyperparameters, score = optimize_hyperparameters(data_handler.x_train, data_handler.y_train.ravel(), neuron_range, activation_functions, seed)
             num_neurons = hyperparameters["neurons"]
             activation_function = hyperparameters["activation_function"]
             
@@ -79,11 +83,11 @@ def select_model(model_name, input_shape):
             num_neurons = int(input("Introduce el número de neuronas en la capa oculta para ELM: "))
             activation_function = input("Introduce la función de activación para ELM (sigmoid/tanh/relu/linear): ")
             
-        print("El número de neuronas en la capa oculta es: ", num_neurons)
-        print("La función de activación es: ", activation_function)
-        logger.info("El número de neuronas en la capa oculta es: ", num_neurons)
-        logger.info("La función de activación es: ", activation_function)
-        return ExtremeLearningMachine(num_neurons=num_neurons, activation_function=activation_function) 
+        print("El número de neuronas en la capa oculta es: "+  str(num_neurons))
+        print("La función de activación es: "+  str(activation_function))
+        logger.info("El número de neuronas en la capa oculta es: "+  str(num_neurons))
+        logger.info("La función de activación es: "+ str(activation_function))
+        return ExtremeLearningMachine(num_neurons=num_neurons, activation_function=activation_function, seed=seed) 
     elif model_name.upper() == "MLP":
         # Solicitar hiperparámetros específicos para MLP
         num_layers = int(input("Introduce el número de capas para MLP: "))
@@ -94,15 +98,15 @@ def select_model(model_name, input_shape):
         loss = input("Introduce la función de pérdida para MLP (mean_squared_error/mean_absolute_error/categorical_crossentropy): ")
         
         print("El modelo elegido para la predicción es MLP")
-        print("El número de capas es: ", num_layers)
-        print("El learning rate es: ", learning_rate)
-        print("El optimizador es: ", optimizer)
-        print("La función de pérdida es: ", loss)
+        print("El número de capas es: "+ str(num_layers))
+        print("El learning rate es: "+ str(learning_rate))
+        print("El optimizador es: "+ str(optimizer))
+        print("La función de pérdida es: "+ str(loss))
         logger.info("El modelo elegido para la predicción es MLP")
-        logger.info("El número de capas es: ", num_layers)
-        logger.info("El learning rate es: ", learning_rate)
-        logger.info("El optimizador es: ", optimizer)
-        logger.info("La función de pérdida es: ", loss)
+        logger.info("El número de capas es: "+ str(num_layers))
+        logger.info("El learning rate es: "+ str(learning_rate))
+        logger.info("El optimizador es: "+ str(optimizer))
+        logger.info("La función de pérdida es: "+ str(loss))
         for i, neurons in enumerate(neurons_per_layer):
             print(f"El número de neuronas en la capa {i+1} es: {neurons}")
             print(f"La función de activación en la capa {i+1} es: {activation_functions[i]}")
@@ -136,6 +140,7 @@ if __name__ == "__main__":
     input_directory = "resources/4_ready/"
     dataset = select_dataset(input_directory)
     if dataset is not None:
+        
         data_handler = DataTreat(dataset)
         data_handler.process_data()
 
